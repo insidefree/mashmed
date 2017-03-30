@@ -11,7 +11,7 @@ link = 'https://l3com.taleo.net/careersection/l3_ext_us/jobsearch.ftl'
 
 class TaleoJobScraper(object):
     def __init__(self):
-        self.driver = webdriver.PhantomJS()
+        self.driver = webdriver.PhantomJS(executable_path=r'C:\Users\denys-s\Documents\Projects\mashmed\utils\phantomjs\bin\phantomjs.exe')
         self.driver.set_window_size(1120, 550)
 
     def scrape_job_links(self):
@@ -30,7 +30,7 @@ class TaleoJobScraper(object):
 
                 job = {}
                 job['title'] = a.text
-                job['url'] = urllib.urljoin(link, a['href'])
+                # job['url'] = urllib.urljoin(link, a['href'])
                 job['location'] = td[2].text
                 jobs.append(job)
 
@@ -62,6 +62,7 @@ class TaleoJobScraper(object):
 
     def scrape(self):
         jobs = self.scrape_job_links()
+        print(jobs)
         for job in jobs:
             print(job)
 
@@ -69,4 +70,5 @@ class TaleoJobScraper(object):
 
 if __name__ == '__main__':
     scraper = TaleoJobScraper()
+    print('***{}', scraper)
     scraper.scrape()
