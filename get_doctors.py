@@ -1,56 +1,70 @@
-import urllib.request
-from bs4 import BeautifulSoup
 from selenium import webdriver
-import time
 
-URL_DOCTORS_OLD_SITE = 'http://assuta-hospital.com/nashi-vrachi.aspx'
-URL_EXAMPLE = 'https://www.google.co.il/?gfe_rd=cr&ei=iQrdWIbIHaag8we_hL6QCA&gws_rd=ssl'
 
-class Doctors(object):
+class Assuta():
     def __init__(self):
         self.driver = webdriver.Chrome()
+        self.mouse = webdriver.ActionChains(self.driver)
+
+class AssutaOld(Assuta):
+    def __init__(self):
+        Assuta.__init__(self)
+
+    def get_doctors_info(self):
+        self.driver.get('http://assuta-hospital.com/nashi-vrachi.aspx')
+        return self.driver.find_elements_by_xpath("//ul[@class='doctorSlider_list js-doctorSlider_list']/li/a")
+
+    def print_doctors_info(self):
+        for el in self.get_doctors_info():
+            print(el.get_attribute('href'))
+        self.driver.quit()
 
 
-def sel():
-    driver = webdriver.PhantomJS()
-    driver.get(URL_DOCTORS_OLD_SITE)
-    time.sleep(3)
-    print(driver.find_element_by_class_name("doctorSlider_list js-doctorSlider_list").text)
-    driver.close()
+class AssutaNew(Assuta):
+    def __init__(self):
+        Assuta.__init__(self)
+        self.username = ''
+        self.password = ''
 
+    def sing_in(self):
+        print('start login')
+        self.driver.get('http://new.assuta-hospital.com/Admin')
+        username = self.driver.find_element_by_id("UserName")
+        password = self.driver.find_element_by_id("Password")
+        username.send_keys("denys.sorokin")
+        password.send_keys("8mfBQn")
+        form = self.driver.find_element_by_id('LoginForm')
+        form.submit()
 
-def get_html(url):
-    response = urllib.request.urlopen(url)
-    return response.read()
+    def fill_doctors_info(self):
+        print('start doctors')
+        self.session_start_doctors()
+        return self.driver.find_element_by_xpath('//*[@id="page-wrapper"]/div[1]/div/h1')
 
+    def delete_all_doctors_info(self):
+        print('start delete all doctors info')
+        self.session_start_doctors()
+        select_all = self.driver.find_element_by_xpath('//*[@id="select-all"]')
+        self.mouse.move_to_element(select_all).click().perform()
+        delete_all = self.driver.find_element_by_xpath('//*[@id="button-delete"]')
+        self.mouse.move_to_element(delete_all).click().perform()
 
-def parse(html):
-    soup = BeautifulSoup(html, 'html.parser')
-    result = soup.find('div', class_='cut_doctorSlider_list')
-    print(soup.prettify())
+    def session_start_doctors(self):
+        self.driver.get('http://new.assuta-hospital.com/Admin/Doctor')
+
+    def session_end(self):
+        self.driver.quit()
 
 
 def main():
-    # doctors = Doctors()
-    # print(doctors.driver.get(URL_DOCTORS_OLD_SITE))
-    # test = doctors.driver.find_element_by_class_name('doctorSlider_list')
-    # print('test', test)
-    # soup = BeautifulSoup(test, 'html.parser')
-    # print('soup', soup.find_element_by_class_name('doctorSlider_list'))
-    # doctors.driver.quit()
-    # print(parse(get_html(URL_DOCTORS_OLD_SITE)))
+    # assuta = AssutaOld()
+    # assuta.print_doctors_info()
+    assuta_new = AssutaNew()
+    assuta_new.sing_in()
+    print(assuta_new.fill_doctors_info().text)
 
-    driver = webdriver.Chrome()
-    html = driver.get('http://assuta-hospital.com/nashi-vrachi.aspx')
-    # print(driver.page_source.encode('utf-8'))
-    elements = []
-    elements =  driver.find_elements_by_xpath("//ul[@class='doctorSlider_list js-doctorSlider_list']/li/a")
-    # elements =  driver.find_elements_by_xpath("//li")
-    # print(elements)
-    for e in elements:
-        print(e.get_attribute('href'))
-    driver.quit()
-    
+    assuta_new.delete_all_doctors_info()
+    assuta_new.session_end()
 
 if __name__ == '__main__':
     main()
