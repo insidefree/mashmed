@@ -46,7 +46,12 @@ class AssutaNew(Assuta):
         self.go_to_doctors()
         result = self.driver.find_element_by_xpath('//*[@id="page-wrapper"]/div[1]/div/h1')
         self.delete_all_doctors_info()
-        self.add_new_doctor()
+        self.add_new_doctor('qweasdzxc', 'http://new.assuta-hospital.com/Content/ru-RU/images/doctors/alexander_belenkyi.jpg',
+                            'sdfghjsdfghdfgh', '/zzzzz/zzzzz/zzzzz')
+        # self.add_new_doctor('qweasdzxcaaaa', 'http://new.assuta-hospital.com/Content/ru-RU/images/doctors/docPageIcon.jpg',
+        #                     'sdfghjsdfghdfgh', '/zzzzz/zzzzz/aaaaazz')
+        # self.add_new_doctor('qweasdzxcbbbbb', 'http://new.assuta-hospital.com/Content/ru-RU/images/doctors/ella-tepper.jpg',
+        #                     'sdfghjsdfghdfgh', '/zzzzz/zzzzz/bbbbzzz')
         return result
 
     def delete_all_doctors_info(self):
@@ -58,31 +63,40 @@ class AssutaNew(Assuta):
         self.mouse.move_to_element(delete_all).click().perform()
         print('Has finished delete all doctors info')
 
-    def add_new_doctor(self):
+    def add_new_doctor(self, doctor_name, image_url, doctor_info_desc, link_link):
         print('Start add doctor')
         self.go_to_add_new_doctor()
         visible_tg = self.driver.find_element_by_xpath('//*[@id="MyPageForm"]/div[1]/div[1]/div/div/div/label')
         name = self.driver.find_element_by_xpath('//*[@id="Name"]')
-        status = self.driver.find_element_by_xpath('//*[@id="ddStatus"]/option[1]').click()
+        status = self.driver.find_element_by_xpath('//*[@id="ddStatus"]/option[3]').click()
+        time.sleep(2)
         upload_image = self.driver.find_element_by_xpath('//*[@id="Image"]')
         first_tg = self.driver.find_element_by_xpath('//*[@id="MyPageForm"]/div[2]/div[1]/div/div/div/span[2]')
         language = self.driver.find_element_by_xpath('//*[@id="ddCulture"]')
         department = self.driver.find_element_by_xpath('//*[@id="ddDepartment"]/option[3]').click()
-        subdepartment = self.driver.find_element_by_xpath('//*[@id="ddSubdepartment"]/option[4]').click()
+        time.sleep(2)
+        # subdepartment = self.driver.find_element_by_xpath('//*[@id="ddSubdepartment"]/option[2]').click()
         doctor_info = self.driver.find_element_by_xpath('//*[@id="DocInfo"]')
-        link = self.driver.find_element_by_xpath('//*[@id="s2id_ddLink"]/a/span[1]')
+        # link = self.driver.find_element_by_xpath('//*[@id="ddLink"]/option[2]').click()
+        # link = self.driver.find_element_by_xpath('//*[@id="s2id_autogen5"]')
         # create_btn = self.driver.find_element_by_xpath('//*[@id="btnInsert"]')
-
-        name.send_keys('qwe')
-        upload_image.send_keys('http://new.assuta-hospital.com/Content/ru-RU/images/doctors/alexander_belenkyi.jpg')
-        doctor_info.send_keys('qwe')
-        link.send_keys('/TEST/TEST/TEST')
-
+        time.sleep(2)
+        name.send_keys(doctor_name)
+        time.sleep(2)
+        upload_image.send_keys(image_url)
+        time.sleep(2)
+        doctor_info.send_keys(doctor_info_desc)
+        # time.sleep(2)
+        # link.send_keys(link_link)
+        time.sleep(2)
         add_new_doctor_form = self.driver.find_element_by_id('MyPageForm')
         add_new_doctor_form.submit()
+        # time.sleep(3)
+        # back = self.driver.find_element_by_xpath('//*[@id="MyPageForm"]/div[5]/div/div/a')
+        # self.mouse.move_to_element(back).click().perform()
 
     def go_to_add_new_doctor(self):
-        time.sleep(5)
+        time.sleep(3)
         self.driver.get('http://new.assuta-hospital.com/Admin/Doctor/New')
 
     def go_to_doctors(self):
