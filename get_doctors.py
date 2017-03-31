@@ -49,15 +49,17 @@ class AssutaNew(Assuta):
         print('start doctors')
         self.go_to_doctors_page()
         result = self.driver.find_element_by_xpath('//*[@id="page-wrapper"]/div[1]/div/h1')
+        self.delete_all_doctors_info()
         return result
 
-    # def delete_all_doctors_info(self):
-    #     print('start delete all doctors info')
-    #     self.session_start_doctors()
-    #     select_all = self.driver.find_element_by_xpath('//*[@id="select-all"]')
-    #     self.mouse.move_to_element(select_all).click().perform()
-    #     delete_all = self.driver.find_element_by_xpath('//*[@id="button-delete"]')
-    #     self.mouse.move_to_element(delete_all).click().perform()
+    def delete_all_doctors_info(self):
+        print('start delete all doctors info')
+        select_all = self.driver.find_element_by_xpath('//*[@id="select-all"]')
+        self.mouse.move_to_element(select_all).click().perform()
+        time.sleep(1)
+        delete_all = self.driver.find_element_by_xpath('//*[@id="button-delete"]')
+        self.mouse.move_to_element(delete_all).click().perform()
+        print('Has finished delete all doctors info')
 
     def go_to_doctors_page(self):
         print('go_to_doctors_page')
