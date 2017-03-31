@@ -1,4 +1,8 @@
 from selenium import webdriver
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+import time
 
 
 class Assuta():
@@ -35,22 +39,31 @@ class AssutaNew(Assuta):
         password.send_keys("8mfBQn")
         form = self.driver.find_element_by_id('LoginForm')
         form.submit()
+        # try:
+        #     form = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(By.ID, "LoginForm"))
+        #     form.submit()
+        # finally:
+        #     self.session_end()
 
     def fill_doctors_info(self):
         print('start doctors')
-        self.session_start_doctors()
-        return self.driver.find_element_by_xpath('//*[@id="page-wrapper"]/div[1]/div/h1')
+        self.go_to_doctors_page()
+        result = self.driver.find_element_by_xpath('//*[@id="page-wrapper"]/div[1]/div/h1')
+        return result
 
-    def delete_all_doctors_info(self):
-        print('start delete all doctors info')
-        self.session_start_doctors()
-        select_all = self.driver.find_element_by_xpath('//*[@id="select-all"]')
-        self.mouse.move_to_element(select_all).click().perform()
-        delete_all = self.driver.find_element_by_xpath('//*[@id="button-delete"]')
-        self.mouse.move_to_element(delete_all).click().perform()
+    # def delete_all_doctors_info(self):
+    #     print('start delete all doctors info')
+    #     self.session_start_doctors()
+    #     select_all = self.driver.find_element_by_xpath('//*[@id="select-all"]')
+    #     self.mouse.move_to_element(select_all).click().perform()
+    #     delete_all = self.driver.find_element_by_xpath('//*[@id="button-delete"]')
+    #     self.mouse.move_to_element(delete_all).click().perform()
 
-    def session_start_doctors(self):
+    def go_to_doctors_page(self):
+        print('go_to_doctors_page')
+        time.sleep(3)
         self.driver.get('http://new.assuta-hospital.com/Admin/Doctor')
+        print('Done - go_to_doctors_page')
 
     def session_end(self):
         self.driver.quit()
@@ -63,7 +76,7 @@ def main():
     assuta_new.sing_in()
     print(assuta_new.fill_doctors_info().text)
 
-    assuta_new.delete_all_doctors_info()
+    # assuta_new.delete_all_doctors_info()
     assuta_new.session_end()
 
 if __name__ == '__main__':
