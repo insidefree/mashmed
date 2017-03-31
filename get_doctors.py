@@ -10,6 +10,7 @@ class Assuta():
         self.driver = webdriver.Chrome()
         self.mouse = webdriver.ActionChains(self.driver)
 
+
 class AssutaOld(Assuta):
     def __init__(self):
         Assuta.__init__(self)
@@ -39,17 +40,13 @@ class AssutaNew(Assuta):
         password.send_keys("8mfBQn")
         form = self.driver.find_element_by_id('LoginForm')
         form.submit()
-        # try:
-        #     form = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(By.ID, "LoginForm"))
-        #     form.submit()
-        # finally:
-        #     self.session_end()
 
     def fill_doctors_info(self):
         print('start doctors')
-        self.go_to_doctors_page()
+        self.go_to_doctors()
         result = self.driver.find_element_by_xpath('//*[@id="page-wrapper"]/div[1]/div/h1')
         self.delete_all_doctors_info()
+        self.add_new_doctor()
         return result
 
     def delete_all_doctors_info(self):
@@ -61,11 +58,36 @@ class AssutaNew(Assuta):
         self.mouse.move_to_element(delete_all).click().perform()
         print('Has finished delete all doctors info')
 
-    def go_to_doctors_page(self):
-        print('go_to_doctors_page')
+    def add_new_doctor(self):
+        print('Start add doctor')
+        self.go_to_add_new_doctor()
+        visible_tg = self.driver.find_element_by_xpath('//*[@id="MyPageForm"]/div[1]/div[1]/div/div/div/label')
+        name = self.driver.find_element_by_xpath('//*[@id="Name"]')
+        status = self.driver.find_element_by_xpath('//*[@id="ddStatus"]/option[1]').click()
+        upload_image = self.driver.find_element_by_xpath('//*[@id="Image"]')
+        first_tg = self.driver.find_element_by_xpath('//*[@id="MyPageForm"]/div[2]/div[1]/div/div/div/span[2]')
+        language = self.driver.find_element_by_xpath('//*[@id="ddCulture"]')
+        department = self.driver.find_element_by_xpath('//*[@id="ddDepartment"]/option[3]').click()
+        subdepartment = self.driver.find_element_by_xpath('//*[@id="ddSubdepartment"]/option[4]').click()
+        doctor_info = self.driver.find_element_by_xpath('//*[@id="DocInfo"]')
+        link = self.driver.find_element_by_xpath('//*[@id="s2id_ddLink"]/a/span[1]')
+        # create_btn = self.driver.find_element_by_xpath('//*[@id="btnInsert"]')
+
+        name.send_keys('qwe')
+        upload_image.send_keys('http://new.assuta-hospital.com/Content/ru-RU/images/doctors/alexander_belenkyi.jpg')
+        doctor_info.send_keys('qwe')
+        link.send_keys('/TEST/TEST/TEST')
+
+        add_new_doctor_form = self.driver.find_element_by_id('MyPageForm')
+        add_new_doctor_form.submit()
+
+    def go_to_add_new_doctor(self):
+        time.sleep(5)
+        self.driver.get('http://new.assuta-hospital.com/Admin/Doctor/New')
+
+    def go_to_doctors(self):
         time.sleep(3)
         self.driver.get('http://new.assuta-hospital.com/Admin/Doctor')
-        print('Done - go_to_doctors_page')
 
     def session_end(self):
         self.driver.quit()
@@ -78,7 +100,6 @@ def main():
     assuta_new.sing_in()
     print(assuta_new.fill_doctors_info().text)
 
-    # assuta_new.delete_all_doctors_info()
     assuta_new.session_end()
 
 if __name__ == '__main__':
