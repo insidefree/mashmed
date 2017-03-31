@@ -44,15 +44,14 @@ class AssutaNew(Assuta):
     def fill_doctors_info(self):
         print('start doctors')
         self.go_to_doctors()
-        result = self.driver.find_element_by_xpath('//*[@id="page-wrapper"]/div[1]/div/h1')
+        # result = self.driver.find_element_by_xpath('//*[@id="page-wrapper"]/div[1]/div/h1')
         self.delete_all_doctors_info()
         self.add_new_doctor('qweasdzxc', 'http://new.assuta-hospital.com/Content/ru-RU/images/doctors/alexander_belenkyi.jpg',
                             'sdfghjsdfghdfgh', '/zzzzz/zzzzz/zzzzz')
-        # self.add_new_doctor('qweasdzxcaaaa', 'http://new.assuta-hospital.com/Content/ru-RU/images/doctors/docPageIcon.jpg',
-        #                     'sdfghjsdfghdfgh', '/zzzzz/zzzzz/aaaaazz')
-        # self.add_new_doctor('qweasdzxcbbbbb', 'http://new.assuta-hospital.com/Content/ru-RU/images/doctors/ella-tepper.jpg',
-        #                     'sdfghjsdfghdfgh', '/zzzzz/zzzzz/bbbbzzz')
-        return result
+        self.add_new_doctor('qweasdzxcaaaa', 'http://new.assuta-hospital.com/Content/ru-RU/images/doctors/docPageIcon.jpg',
+                            'sdfghjsdfghdfgh', '/zzzzz/zzzzz/aaaaazz')
+        self.add_new_doctor('qweasdzxcbbbbb', 'http://new.assuta-hospital.com/Content/ru-RU/images/doctors/ella-tepper.jpg',
+                            'sdfghjsdfghdfgh', '/zzzzz/zzzzz/bbbbzzz')
 
     def delete_all_doctors_info(self):
         print('start delete all doctors info')
@@ -79,13 +78,14 @@ class AssutaNew(Assuta):
         # link = self.driver.find_element_by_xpath('//*[@id="s2id_autogen5"]')
         # create_btn = self.driver.find_element_by_xpath('//*[@id="btnInsert"]')
         name.send_keys(doctor_name)
-        upload_image.send_keys(image_url)
-        doctor_info.send_keys(doctor_info_desc)
-        # time.sleep(2)
+        # upload_image.send_keys(image_url)
+        # doctor_info.send_keys(doctor_info_desc)
         # link.send_keys(link_link)
-        time.sleep(2)
+        time.sleep(5)
+        print('form start')
         add_new_doctor_form = self.driver.find_element_by_id('MyPageForm')
         add_new_doctor_form.submit()
+        print('form end')
         # time.sleep(3)
         # back = self.driver.find_element_by_xpath('//*[@id="MyPageForm"]/div[5]/div/div/a')
         # self.mouse.move_to_element(back).click().perform()
@@ -107,7 +107,7 @@ def main():
     # assuta.print_doctors_info()
     assuta_new = AssutaNew()
     assuta_new.sing_in()
-    print(assuta_new.fill_doctors_info().text)
+    assuta_new.fill_doctors_info()
 
     assuta_new.session_end()
 
