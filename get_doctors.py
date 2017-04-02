@@ -36,8 +36,8 @@ class AssutaNew(Assuta):
         self.driver.get('http://new.assuta-hospital.com/Admin')
         username = self.driver.find_element_by_id("UserName")
         password = self.driver.find_element_by_id("Password")
-        username.send_keys("denys.sorokin")
-        password.send_keys("8mfBQn")
+        username.send_keys("")
+        password.send_keys("")
         form = self.driver.find_element_by_id('LoginForm')
         form.submit()
 
