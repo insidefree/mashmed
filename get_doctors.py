@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 import time
 
 
-class Assuta():
+class Assuta:
     def __init__(self):
         self.driver = webdriver.Chrome()
         self.mouse = webdriver.ActionChains(self.driver)
@@ -103,7 +103,7 @@ class AssutaNew(Assuta):
 
 
 def main():
-    # assuta = AssutaOld()
+    # assuta = Assuta()
     # assuta.print_doctors_info()
     assuta_new = AssutaNew()
     assuta_new.sing_in()
