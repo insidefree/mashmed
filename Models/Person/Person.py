@@ -5,7 +5,8 @@ db = SqliteDatabase(DATA_BASE_NAME)
 
 
 class Person(Model):
-    name = CharField(null=True)
+    first_name = CharField(null=True)
+    second_name = CharField(null=True)
     birthday = DateField(null=True)
     vacation = CharField(null=True)
     image = CharField(null=True)

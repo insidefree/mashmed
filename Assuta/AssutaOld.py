@@ -8,17 +8,21 @@ class AssutaOld(Assuta):
 
     def save_doctors(self):
         self.driver.get('http://assuta-hospital.com/nashi-vrachi.aspx')
-        links2 = [link.get_attribute('href') for link in
+        links = [link.get_attribute('href') for link in
                   self.driver.find_elements_by_xpath("//ul[@class='doctorSlider_list js-doctorSlider_list']/li/a")]
         ent_flag = True
         ophthalmologist_flag = True
         surgeon_flag = True
         uro_gynecology_flag = True
-        for link in links2:
+        for link in links:
             # print('{}'.format(link))
             self.driver.get(link)
             name = self.driver.find_element_by_xpath('//*[@id="dBody"]/center/table/tbody/tr[3]/td/div/'
                                                      'table/tbody/tr/td[2]/div[2]/div/div/h1')
+            all = self.driver.find_elements_by_xpath(
+                '//*[@id="dBody"]/center/table/tbody/tr[3]/td/div/table/tbody/tr/td[2]/div[2]/div/div')
+            for ind, val in enumerate(all):
+                print(f'{ind}: {val.find_elements()}')
             # print('* ', name.text)
 
             if name.text == 'ЛОР-СПЕЦИАЛИСТЫ' and ent_flag is True:
@@ -44,19 +48,28 @@ class AssutaOld(Assuta):
                     '//*[@id="dBody"]/center/table/tbody/tr[3]/td/div/table/tbody/tr/td[2]/div[2]/div/div[1]/p')]
                 AssutaOld.save_doctors_from_sublist(uro_gynecology_list[1::])
                 uro_gynecology_flag = False
+
             if name.text != 'ЛОР-СПЕЦИАЛИСТЫ' and name.text != 'НАШИ ОФТАЛЬМОЛОГИ' \
                     and name.text != 'ПЛАСТИЧЕСКИЕ ХИРУРГИ' and name.text != 'УРОГИНЕКОЛОГИ':
-                doctor = Doctor(name=name.text, birthday='', vacation='', image='', language='', info='', department='',
-                                subDepartment='', visible_tg='', status='', first_tg='', link='')
-            doctor.save()
+                # AssutaOld.save_doctor_from_query(name)
+                # doctor = Doctor(name=name.text, birthday='', vacation='', image='', language='', info='', department='',
+                #                 subDepartment='', visible_tg='', status='', first_tg='', link='')
+                # doctor.save()
+                pass
 
     @staticmethod
     def save_doctors_from_sublist(doctors_list):
         for doctor in doctors_list[::2]:
+            doc = doctor.split()
             index = doctors_list.index(doctor)
-            doctor = Doctor(name=doctor, birthday='', vacation='', image='', language='', info=doctors_list[index + 1],
-                            department='', subDepartment='', visible_tg='', status='', first_tg='', link='')
+            doctor = Doctor(academic_title=doc[0], first_name=doc[1], second_name=doc[2], birthday='', vacation='',
+                            image='', language='', info=doctors_list[index + 1], department='', subDepartment='',
+                            visible_tg='', status='', first_tg='', link='')
             doctor.save()
+
+    @staticmethod
+    def save_doctor_from_query(name):
+        print(name.text)
 
     @staticmethod
     def handling_surgeon_list(lst, value):

@@ -9,3 +9,4 @@ class Doctor(Person):
     status = CharField(null=True)
     first_tg = CharField(null=True)
     link = CharField(null=True)
+    academic_title = CharField(null=True)
