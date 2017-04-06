@@ -74,7 +74,7 @@ class AssutaOld(Assuta):
                                 first_name=lst[1].upper(), birthday='',
                                 second_name=' '.join(lst[2:]), vacation='', image=image_address, language='',
                                 info=Utils.remove_blank_lines(info), department='', subDepartment='', visible_tg='',
-                                status='', first_tg='', link='')
+                                status='', first_tg='', link='/' + link.split('/')[-1])
                 doctor.save()
 
     @staticmethod
