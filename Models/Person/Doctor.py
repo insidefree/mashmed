@@ -11,4 +11,7 @@ class Doctor(Person):
     link = CharField(null=True)
     academic_title = CharField(null=True)
 
-
+    @staticmethod
+    def get_doctors_from_db():
+        for doctor in Doctor.select():
+            print(f'{doctor.first_name}')
