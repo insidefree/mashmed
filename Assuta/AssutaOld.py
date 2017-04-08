@@ -1,6 +1,9 @@
 from Assuta.Assuta import Assuta
+from Models.Person.Department import Department
 from Models.Person.Doctor import Doctor
 from Models.Person.AcademicTitle import AcademicTitle
+from Models.Person.Language import Language
+from Models.Person.Status import Status
 from Utils.Utils import Utils
 from urllib.request import urlretrieve
 from selenium.common.exceptions import NoSuchElementException
@@ -73,12 +76,14 @@ class AssutaOld(Assuta):
 
                 academic_title = AcademicTitle.get(
                     AcademicTitle.academic_title == Utils.handle_academic_title(lst[0].upper()))
-                print(academic_title)
+                language = Language.get(Language.language == 'RUSSIAN')
+                status = Status.get(Status.status == 'Chief')
+                department = Department.get(Department.department_title == 'Oncology')
                 Doctor.create(academic_title=academic_title,
                               first_name=lst[1].upper(), birthday='',
-                              second_name=' '.join(lst[2:]), vacation='', image=image_address, language='',
-                              info=Utils.remove_blank_lines(info), department=None, subDepartment='', visible_tg='',
-                              status='', first_tg='', link='/' + link.split('/')[-1])
+                              second_name=' '.join(lst[2:]), vacation='', image=image_address, language=language,
+                              info=Utils.remove_blank_lines(info), department=department, sub_department=None, visible_tg='',
+                              status=status, first_tg='', link='/' + link.split('/')[-1])
 
     @staticmethod
     def save_doctors_from_sublist(doctors_list):
@@ -87,10 +92,13 @@ class AssutaOld(Assuta):
             index = doctors_list.index(doctor)
             academic_title = AcademicTitle.get(
                 AcademicTitle.academic_title == Utils.handle_academic_title(doc[0].upper()))
+            language = Language.get(Language.language == 'RUSSIAN')
+            status = Status.get(Status.status == 'Chief')
+            department = Department.get(Department.department_title == 'Oncology')
             Doctor.create(academic_title=academic_title, first_name=doc[1].upper(),
-                          second_name=doc[2].upper(), birthday='', vacation='', image='', language='',
-                          info=Utils.remove_blank_lines(doctors_list[index + 1]), department=None, subDepartment='',
-                          visible_tg='', status='', first_tg='', link='')
+                          second_name=doc[2].upper(), birthday='', vacation='', image='', language=language,
+                          info=Utils.remove_blank_lines(doctors_list[index + 1]), department=department, sub_department=None,
+                          visible_tg='', status=status, first_tg='', link='')
 
     @staticmethod
     def save_doctor_from_query(name):
