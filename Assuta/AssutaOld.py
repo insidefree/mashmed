@@ -1,5 +1,6 @@
 from Assuta.Assuta import Assuta
 from Models.Person.Doctor import Doctor
+from Models.Person.AcademicTitle import AcademicTitle
 from Utils.Utils import Utils
 from urllib.request import urlretrieve
 from selenium.common.exceptions import NoSuchElementException
@@ -70,23 +71,26 @@ class AssutaOld(Assuta):
                 except NoSuchElementException:
                     pass
 
-                doctor = Doctor(academic_title=Utils.handle_academic_title(lst[0].upper()),
-                                first_name=lst[1].upper(), birthday='',
-                                second_name=' '.join(lst[2:]), vacation='', image=image_address, language='',
-                                info=Utils.remove_blank_lines(info), department='', subDepartment='', visible_tg='',
-                                status='', first_tg='', link='/' + link.split('/')[-1])
-                doctor.save()
+                academic_title = AcademicTitle.get(
+                    AcademicTitle.academic_title == Utils.handle_academic_title(lst[0].upper()))
+                print(academic_title)
+                Doctor.create(academic_title=academic_title,
+                              first_name=lst[1].upper(), birthday='',
+                              second_name=' '.join(lst[2:]), vacation='', image=image_address, language='',
+                              info=Utils.remove_blank_lines(info), department=None, subDepartment='', visible_tg='',
+                              status='', first_tg='', link='/' + link.split('/')[-1])
 
     @staticmethod
     def save_doctors_from_sublist(doctors_list):
         for doctor in doctors_list[::2]:
             doc = doctor.split()
             index = doctors_list.index(doctor)
-            doctor = Doctor(academic_title=Utils.handle_academic_title(doc[0].upper()), first_name=doc[1].upper(),
-                            second_name=doc[2].upper(), birthday='', vacation='', image='', language='',
-                            info=Utils.remove_blank_lines(doctors_list[index + 1]), department='', subDepartment='',
-                            visible_tg='', status='', first_tg='', link='')
-            doctor.save()
+            academic_title = AcademicTitle.get(
+                AcademicTitle.academic_title == Utils.handle_academic_title(doc[0].upper()))
+            Doctor.create(academic_title=academic_title, first_name=doc[1].upper(),
+                          second_name=doc[2].upper(), birthday='', vacation='', image='', language='',
+                          info=Utils.remove_blank_lines(doctors_list[index + 1]), department=None, subDepartment='',
+                          visible_tg='', status='', first_tg='', link='')
 
     @staticmethod
     def save_doctor_from_query(name):

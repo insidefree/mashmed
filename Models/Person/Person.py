@@ -1,3 +1,4 @@
+from Models.Person.Language import Language
 from const import DATA_BASE_NAME
 from peewee import *
 
@@ -8,9 +9,8 @@ class Person(Model):
     first_name = CharField(null=True)
     second_name = CharField(null=True)
     birthday = DateField(null=True)
-    vacation = CharField(null=True)
     image = CharField(null=True)
-    language = CharField(null=True)
+    language = ForeignKeyField(Language)
     info = TextField(null=True)
 
     class Meta:

@@ -6,3 +6,7 @@ ACADEMIC_TITLE_DIC = {
     'ПРОФ.': 'ПРОФЕССОР',
     'ПРОФ': 'ПРОФЕССОР'
 }
+
+ACADEMIC_TITLES = {
+
+}

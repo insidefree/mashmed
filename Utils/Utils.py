@@ -1,5 +1,9 @@
 from const import ACADEMIC_TITLE_DIC
 
+from Models.Person.Department import Department
+
+dep = Department()
+
 
 class Utils:
     @staticmethod
@@ -11,4 +15,4 @@ class Utils:
         if academic_title in ACADEMIC_TITLE_DIC:
             return ACADEMIC_TITLE_DIC[academic_title]
         else:
-            return academic_title
+            return academic_title if academic_title != '' else None
